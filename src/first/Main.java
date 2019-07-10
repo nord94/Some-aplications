@@ -28,25 +28,24 @@ class SuitableFile extends File {
 public class Main extends Thread {
     static String extension;
     static final String PATH = "D:\\1";
+    static final int NUMOFTHREADS = 12;
     static ArrayList<SuitableFile> files = new ArrayList<>();
     int counter;
     static String searchPhrase;
     Thread thrd;
 
     public static void main(String[] args) throws Exception {
-        int numOfThreads;
         Main[] threads;
 
-        numOfThreads = 12;
         threads = new Main[12];
         extension = "txt";
         searchPhrase = "lol";
         listf(PATH, files);
-        for (int i = 0; i < numOfThreads; i++) {
+        for (int i = 0; i < NUMOFTHREADS; i++) {
             threads[i] = new Main("Thread #" + i, i);
         }
 
-        for (int i = 0; i < numOfThreads; i++) {
+        for (int i = 0; i < NUMOFTHREADS; i++) {
             try {
                 threads[i].thrd.join();
                 System.out.printf("Поток %d присоединен\n", i);
@@ -82,7 +81,7 @@ public class Main extends Thread {
 
     }
 
-    static boolean isExist(File file, String phrase) throws IOException {
+    boolean isExist(File file, String phrase) throws IOException {
         String str;
         FileInputStream fin;
         fin = new FileInputStream(file.getAbsolutePath());
