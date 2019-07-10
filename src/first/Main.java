@@ -4,27 +4,45 @@ import java.io.*;
 import java.util.*;
 import java.nio.file.DirectoryStream;
 
-public class Main {
+public class Main extends Thread {
     static String extension;
-    static final String PATH = "D:\\1";
+    static String path;
+    static String phrase;
+
+    Main(String directoryPath, String fileExtension, String name, String searchPhrase) {
+        super(name);
+        extension = fileExtension;
+        directoryPath = path;
+    }
+
+    public void run(File file, boolean isIn) throws IOException {
+        isIn = isExist(file, phrase);
+    }
 
     public static void main(String[] args) throws Exception {
         String searchPhrase;
         ArrayList<File> files;
-        ArrayList<Integer> filesWithPhrase;
+        int numOfThreads;
+        Thread[][] threads;
 
         files = new ArrayList<File>();
-        filesWithPhrase = new ArrayList<Integer>();
-        extension = "txt";
-        searchPhrase = "lol";
-        listf(PATH, files);
+        getListOfFiles(path, files);
+        numOfThreads = 12;
+        threads = new Thread[numOfThreads][files.size()];
+
+        for (int i = 0; i < threads.length; i++) {
+            for (int j = 0; j < threads[i].length; j++) {
+            }
+        }
+
 
         for (int i = 0; i < files.size(); i++) {
             boolean isIn;
             String message;
-            isIn = isExist(files.get(i), searchPhrase);
-            if (isIn) message =  "("+ files.get(i).getAbsolutePath() + ") YES ";
-            else message = "("+ files.get(i).getAbsolutePath() + ") NO ";
+            isIn = false;
+
+            if (isIn) message = "(" + files.get(i).getAbsolutePath() + ") YES ";
+            else message = "(" + files.get(i).getAbsolutePath() + ") NO ";
             System.out.println(message);
         }
     }
@@ -72,12 +90,7 @@ public class Main {
         return buf.toString();
     }
 
-    static String getMatchingFileAdress(FilenameFilter filter, File file) {
-
-        return "adress";
-    }
-
-    public static void listf(String directoryName, ArrayList<File> files) {
+    public static void getListOfFiles(String directoryName, ArrayList<File> files) {
         File directory = new File(directoryName);
         // Get all files from a directory.
         File[] fList = directory.listFiles();
@@ -87,7 +100,7 @@ public class Main {
                     if (file.toString().toLowerCase().contains(extension))
                         files.add(file);
                 } else if (file.isDirectory()) {
-                    listf(file.getAbsolutePath(), files);
+                    getListOfFiles(file.getAbsolutePath(), files);
                 }
             }
     }
