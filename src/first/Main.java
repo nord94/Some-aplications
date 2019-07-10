@@ -4,32 +4,46 @@ import java.io.*;
 import java.util.*;
 import java.nio.file.DirectoryStream;
 
+class SuitableFile extends File {
+    private boolean isSuitable;
+
+    SuitableFile(String path, boolean suitable) {
+        super(path);
+        isSuitable = suitable;
+    }
+
+    SuitableFile(String path) {
+        super(path);
+    }
+
+    public boolean isSuitable() {
+        return isSuitable;
+    }
+
+    public void setSuitable(boolean suitable) {
+        isSuitable = suitable;
+    }
+}
+
 public class Main {
     static String extension;
     static final String PATH = "D:\\1";
 
     public static void main(String[] args) throws Exception {
         String searchPhrase;
-        ArrayList<File> files;
-        ArrayList<Integer> filesWithPhrase;
+        ArrayList<SuitableFile> files;
 
-        files = new ArrayList<File>();
-        filesWithPhrase = new ArrayList<Integer>();
+        files = new ArrayList<>();
         extension = "txt";
         searchPhrase = "lol";
         listf(PATH, files);
 
         for (int i = 0; i < files.size(); i++) {
-            boolean isIn;
-            String message;
-            isIn = isExist(files.get(i), searchPhrase);
-            if (isIn) message =  "("+ files.get(i).getAbsolutePath() + ") YES ";
-            else message = "("+ files.get(i).getAbsolutePath() + ") NO ";
-            System.out.println(message);
+            files.get(i).setSuitable(isExist(files.get(i), searchPhrase));
+            System.out.printf("File (%s) contains (%s): %b\n", files.get(i).getAbsolutePath(),
+                    searchPhrase, files.get(i).isSuitable());
         }
     }
-
-    static Scanner input = new Scanner(System.in);
 
     static boolean isExist(File file, String phrase) throws IOException {
         String str;
@@ -77,7 +91,7 @@ public class Main {
         return "adress";
     }
 
-    public static void listf(String directoryName, ArrayList<File> files) {
+    public static void listf(String directoryName, ArrayList<SuitableFile> files) {
         File directory = new File(directoryName);
         // Get all files from a directory.
         File[] fList = directory.listFiles();
@@ -85,7 +99,7 @@ public class Main {
             for (File file : fList) {
                 if (file.isFile()) {
                     if (file.toString().toLowerCase().contains(extension))
-                        files.add(file);
+                        files.add(new SuitableFile(file.getAbsolutePath()));
                 } else if (file.isDirectory()) {
                     listf(file.getAbsolutePath(), files);
                 }
