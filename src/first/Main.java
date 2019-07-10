@@ -25,24 +25,61 @@ class SuitableFile extends File {
     }
 }
 
-public class Main {
+public class Main extends Thread {
     static String extension;
     static final String PATH = "D:\\1";
+    static ArrayList<SuitableFile> files = new ArrayList<>();
+    int counter;
+    static String searchPhrase;
+    Thread thrd;
 
     public static void main(String[] args) throws Exception {
-        String searchPhrase;
-        ArrayList<SuitableFile> files;
+        int numOfThreads;
+        Main[] threads;
 
-        files = new ArrayList<>();
+        numOfThreads = 12;
+        threads = new Main[12];
         extension = "txt";
         searchPhrase = "lol";
         listf(PATH, files);
+        for (int i = 0; i < numOfThreads; i++) {
+            threads[i] = new Main("Thread #" + i, i);
+        }
 
+        for (int i = 0; i < numOfThreads; i++) {
+            try {
+                threads[i].thrd.join();
+                System.out.printf("Поток %d присоединен\n", i);
+            }catch (InterruptedException exc){
+                System.out.println("прерывание основного потока");
+            }
+        }
         for (int i = 0; i < files.size(); i++) {
-            files.get(i).setSuitable(isExist(files.get(i), searchPhrase));
             System.out.printf("File (%s) contains (%s): %b\n", files.get(i).getAbsolutePath(),
                     searchPhrase, files.get(i).isSuitable());
         }
+
+        /*for (int i = 0; i < files.size(); i++) {
+            files.get(i).setSuitable(isExist(files.get(i), searchPhrase));
+            System.out.printf("File (%s) contains (%s): %b\n", files.get(i).getAbsolutePath(),
+                    searchPhrase, files.get(i).isSuitable());
+        }*/
+    }
+
+    Main(String name, int count) {
+        thrd = new Thread(this, name);
+        counter = count;
+        thrd.start();
+    }
+
+    @Override
+    public void run(){
+        try {
+            files.get(counter).setSuitable(isExist(files.get(counter), searchPhrase));
+        }catch (IOException exc){
+            System.out.println("Ошибка при чтении файла");
+        }
+
     }
 
     static boolean isExist(File file, String phrase) throws IOException {
