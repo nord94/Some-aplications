@@ -51,16 +51,6 @@ public class Main {
         fin = new FileInputStream(file.getAbsolutePath());
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fin, 1024 * 1024);
         str = convertFromByteToString(bufferedInputStream);
-
-        /*ArrayList<Integer> enteries;
-        if (str.contains(phrase)) {
-            enteries = new ArrayList<>();
-            scoreEnteriesIndexes(str, enteries, phrase);
-            for (int i = 0; i < enteries.size(); i++) {
-                System.out.print(enteries.get(i)+ " ");
-            }
-            System.out.println();
-        }*/
         return str.contains(phrase);
     }
 
@@ -86,12 +76,7 @@ public class Main {
         return buf.toString();
     }
 
-    static String getMatchingFileAdress(FilenameFilter filter, File file) {
-
-        return "adress";
-    }
-
-    public static void listf(String directoryName, ArrayList<SuitableFile> files) {
+    static void listf(String directoryName, ArrayList<SuitableFile> files) {
         File directory = new File(directoryName);
         // Get all files from a directory.
         File[] fList = directory.listFiles();
