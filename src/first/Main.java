@@ -4,50 +4,46 @@ import java.io.*;
 import java.util.*;
 import java.nio.file.DirectoryStream;
 
-public class Main extends Thread {
+class SuitableFile extends File {
+    private boolean isSuitable;
+
+    SuitableFile(String path, boolean suitable) {
+        super(path);
+        isSuitable = suitable;
+    }
+
+    SuitableFile(String path) {
+        super(path);
+    }
+
+    public boolean isSuitable() {
+        return isSuitable;
+    }
+
+    public void setSuitable(boolean suitable) {
+        isSuitable = suitable;
+    }
+}
+
+public class Main {
     static String extension;
-    static String path;
-    static String phrase;
-
-    Main(String directoryPath, String fileExtension, String name, String searchPhrase) {
-        super(name);
-        extension = fileExtension;
-        directoryPath = path;
-    }
-
-    public void run(File file, boolean isIn) throws IOException {
-        isIn = isExist(file, phrase);
-    }
+    static final String PATH = "D:\\1";
 
     public static void main(String[] args) throws Exception {
         String searchPhrase;
-        ArrayList<File> files;
-        int numOfThreads;
-        Thread[][] threads;
+        ArrayList<SuitableFile> files;
 
-        files = new ArrayList<File>();
-        getListOfFiles(path, files);
-        numOfThreads = 12;
-        threads = new Thread[numOfThreads][files.size()];
-
-        for (int i = 0; i < threads.length; i++) {
-            for (int j = 0; j < threads[i].length; j++) {
-            }
-        }
-
+        files = new ArrayList<>();
+        extension = "txt";
+        searchPhrase = "lol";
+        listf(PATH, files);
 
         for (int i = 0; i < files.size(); i++) {
-            boolean isIn;
-            String message;
-            isIn = false;
-
-            if (isIn) message = "(" + files.get(i).getAbsolutePath() + ") YES ";
-            else message = "(" + files.get(i).getAbsolutePath() + ") NO ";
-            System.out.println(message);
+            files.get(i).setSuitable(isExist(files.get(i), searchPhrase));
+            System.out.printf("File (%s) contains (%s): %b\n", files.get(i).getAbsolutePath(),
+                    searchPhrase, files.get(i).isSuitable());
         }
     }
-
-    static Scanner input = new Scanner(System.in);
 
     static boolean isExist(File file, String phrase) throws IOException {
         String str;
@@ -55,16 +51,6 @@ public class Main extends Thread {
         fin = new FileInputStream(file.getAbsolutePath());
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fin, 1024 * 1024);
         str = convertFromByteToString(bufferedInputStream);
-
-        /*ArrayList<Integer> enteries;
-        if (str.contains(phrase)) {
-            enteries = new ArrayList<>();
-            scoreEnteriesIndexes(str, enteries, phrase);
-            for (int i = 0; i < enteries.size(); i++) {
-                System.out.print(enteries.get(i)+ " ");
-            }
-            System.out.println();
-        }*/
         return str.contains(phrase);
     }
 
@@ -90,7 +76,7 @@ public class Main extends Thread {
         return buf.toString();
     }
 
-    public static void getListOfFiles(String directoryName, ArrayList<File> files) {
+    static void listf(String directoryName, ArrayList<SuitableFile> files) {
         File directory = new File(directoryName);
         // Get all files from a directory.
         File[] fList = directory.listFiles();
@@ -98,9 +84,9 @@ public class Main extends Thread {
             for (File file : fList) {
                 if (file.isFile()) {
                     if (file.toString().toLowerCase().contains(extension))
-                        files.add(file);
+                        files.add(new SuitableFile(file.getAbsolutePath()));
                 } else if (file.isDirectory()) {
-                    getListOfFiles(file.getAbsolutePath(), files);
+                    listf(file.getAbsolutePath(), files);
                 }
             }
     }
