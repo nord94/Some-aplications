@@ -6,18 +6,18 @@ import java.util.ArrayList;
 public class FastFileSearch implements Runnable {
     Thread thrd;
     SuitableFile file;
-    int counter;
+    static String phrase;
 
     @Override
     public void run() {
-        file.setSuitable();
+        file.setSuitable(phrase);
         System.out.printf("(%s) launched\n", thrd.getName());
     }
 
-    FastFileSearch(String name, SuitableFile suitableFile) {
+    FastFileSearch(String name, SuitableFile suitableFile, String searchPhrase) {
         thrd = new Thread(this, name);
         file = suitableFile;
+        phrase = searchPhrase;
         thrd.start();
     }
-
 }

@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static String path = "D:\\1";
+    static final String PATH = "D:\\1";
     static String extension = "txt";
     static String phrase = "";
     static ArrayList<SuitableFile> files = new ArrayList<>();
@@ -13,10 +13,10 @@ public class Main {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws Exception {
-        listf(path, files);
+        listf(PATH, files);
         threads = new FastFileSearch[NUM_OF_THREADS];
         for (int i = 0; i < NUM_OF_THREADS; i++) {
-            threads[i] = new FastFileSearch("Thread #" + i, files.get(i));
+            threads[i] = new FastFileSearch("Thread #" + i, files.get(i), phrase);
         }
         for (int i = 0; i < NUM_OF_THREADS; i++) {
             threads[i].thrd.join();

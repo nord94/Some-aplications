@@ -46,8 +46,8 @@ class SuitableFile {
         return isSuitable;
     }
 
-    public void setSuitable() {
-        isSuitable = isExist(file, Main.phrase);
+    public void setSuitable(String searchPhrase) {
+        isSuitable = isExist(file, searchPhrase);
     }
 
     static void scoreEnteriesIndexes(String str, ArrayList<Integer> ents, String phrase) {
@@ -56,7 +56,7 @@ class SuitableFile {
         firstIndex = str.indexOf(phrase);
         lastIndex = str.lastIndexOf(phrase);
         ents.add(firstIndex);
-        while ((firstIndex != lastIndex) & (firstIndex < lastIndex)) {
+        while (firstIndex < lastIndex) {
             firstIndex = str.indexOf(phrase, (firstIndex + 1));
             ents.add(firstIndex);
         }
