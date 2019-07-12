@@ -1,23 +1,21 @@
 package first;
 
-import java.io.*;
-import java.util.ArrayList;
-
 public class FastFileSearch implements Runnable {
     Thread thrd;
     SuitableFile file;
-    static String phrase;
+    static String codePhrase;
+    static int counter = 0;
 
     @Override
     public void run() {
-        file.setSuitable(phrase);
+        file.setSuitable(codePhrase);
         System.out.printf("(%s) launched\n", thrd.getName());
     }
 
     FastFileSearch(String name, SuitableFile suitableFile, String searchPhrase) {
         thrd = new Thread(this, name);
         file = suitableFile;
-        phrase = searchPhrase;
+        codePhrase = searchPhrase;
         thrd.start();
     }
 }

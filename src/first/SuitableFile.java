@@ -6,7 +6,6 @@ import java.util.ArrayList;
 class SuitableFile {
     private boolean isSuitable;
     private final File file;
-    String phrase;
     static final int MAX_BUF_SIZE = 1024 * 1024 * 200;
 
     SuitableFile(File inputFile) {
